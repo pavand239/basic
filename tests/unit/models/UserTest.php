@@ -31,7 +31,7 @@ class UserTest extends \Codeception\Test\Unit
     /**
      * @depends testFindUserByUsername
      */
-    public function testValidateUser($user)
+    public function testValidateUser()
     {
         $user = User::findByUsername('pavand');
         expect_that($user->validateAuthKey('U9LIXcFNdRyaVGJmNyxmRAWYHIXHnTNc'));
@@ -41,4 +41,13 @@ class UserTest extends \Codeception\Test\Unit
         expect_not($user->validatePassword('123456'));        
     }
 
+    public function testCreateUser() {
+        $user = User::createUser('testLogin','1234');
+        expect_that($user->username == 'testLogin');
+        expect_not($user->username == 'login');
+
+        expect_that($user->validatePassword('1234'));
+        expect_not($user->validatePassword('1222123'));
+        $user->delete();
+    }
 }

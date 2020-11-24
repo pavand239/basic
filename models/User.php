@@ -106,15 +106,18 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
     /**
      * @param $username string
      * @param $password string
-     * @return boolean
+     * @return User
      */
-    public function createUser($username, $password) {
-        $this->username = $username;
-        $this->password = \Yii::$app->security->generatePasswordHash($password);
-        if ($this->save()) {
-            return true;
+    public static function createUser($username, $password) {
+        $loginData = [
+            'username' => $username,
+            'password' => \Yii::$app->security->generatePasswordHash($password)
+        ];
+        $user = new static($loginData);
+        if ($user->save()) {
+            return $user;
         }
-        return false;
+        return null;
     }
 
     public function beforeSave($insert)

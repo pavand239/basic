@@ -20,14 +20,12 @@ class TestController extends Controller
         }
         $model = new SignupForm();
         if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
-            $user = new User();
 //            echo '<pre>';
 //
 //            $user->validate();
 //            var_dump($user->firstErrors);
 //            exit;
-
-            if ($user->createUser($model->username, $model->password)) {
+            if ($user = User::createUser($model->username, $model->password)) {
                 \Yii::$app->user->login($user, 0);
                 return $this->goHome();
             }
