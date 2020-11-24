@@ -2,7 +2,7 @@
 namespace app\controllers;
 
 use app\models\Country;
-use app\models\LoginForm;
+
 use app\models\SignupForm;
 use app\models\User;
 use yii\data\Pagination;
@@ -34,6 +34,10 @@ class TestController extends Controller
                 return $this->goHome();
             }
             die;
+        } else if (\Yii::$app->request->post() && !$model->validate()) {
+            echo '<pre>';
+            var_dump($model->errors);
+            echo '</pre>';
         }
         return $this->render('signup', compact('model'));
     }
