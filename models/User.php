@@ -1,20 +1,20 @@
 <?php
 
+
+
+namespace app\models;
+
+use yii\db\ActiveRecord;
+
 /**
  * User model
  *
  * @property integer $id
  * @property string $username
  * @property string $password
- * @property string $password
  * @property string $authKey
  * @property string $accessToken
  **/
-
-namespace app\models;
-
-use yii\db\ActiveRecord;
-
 class User extends ActiveRecord implements \yii\web\IdentityInterface
 {
 //    public $id;
@@ -101,6 +101,20 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
     public function validatePassword($password)
     {
         return \Yii::$app->security->validatePassword($password, $this->password);
+    }
+
+    /**
+     * @param $username string
+     * @param $password string
+     * @return boolean
+     */
+    public function createUser($username, $password) {
+        $this->username = $username;
+        $this->password = \Yii::$app->security->generatePasswordHash($password);
+        if ($this->save()) {
+            return true;
+        }
+        return false;
     }
 
     public function beforeSave($insert)

@@ -21,24 +21,23 @@ class TestController extends Controller
         $model = new SignupForm();
         if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
             $user = new User();
-            $user->username = $model->username;
-            $user->password = \Yii::$app->security->generatePasswordHash($model->password);
 //            echo '<pre>';
 //
 //            $user->validate();
 //            var_dump($user->firstErrors);
 //            exit;
 
-            if ($user->save()) {
+            if ($user->createUser($model->username, $model->password)) {
                 \Yii::$app->user->login($user, 0);
                 return $this->goHome();
             }
             die;
-        } else if (\Yii::$app->request->post() && !$model->validate()) {
-            echo '<pre>';
-            var_dump($model->errors);
-            echo '</pre>';
         }
+//        } else if (\Yii::$app->request->post() && !$model->validate()) {
+//            echo '<pre>';
+//            var_dump($model->errors);
+//            echo '</pre>';
+//        }
         return $this->render('signup', compact('model'));
     }
 
